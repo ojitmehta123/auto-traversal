@@ -24,8 +24,8 @@ args = vars(ap.parse_args())
 # define the lower and upper boundaries of the "green"
 # ball in the HSV color space, then initialize the
 # list of tracked points
-greenLower = (21, 200, 112)
-greenUpper = (30, 255, 215)
+greenLower = (29, 86, 6)
+greenUpper = (64, 255, 255)
 pts = deque(maxlen=args["buffer"])
 
 # if a video path was not supplied, grab the reference
@@ -57,15 +57,16 @@ while True:
 	# resize the frame, blur it, and convert it to the HSV
 	# color space
 	frame = imutils.resize(frame, width=600)
-	blurred = cv2.GaussianBlur(frame, (11, 11), 0)
+	blurred = cv2.GaussianBlur(frame, (21, 21), 0)
 	hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
 
 	# construct a mask for the color "green", then perform
 	# a series of dilations and erosions to remove any small
 	# blobs left in the mask
 	mask = cv2.inRange(hsv, greenLower, greenUpper)
-	mask = cv2.erode(mask, None, iterations=2)
-	mask = cv2.dilate(mask, None, iterations=2)
+	kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(3,3))
+	mask = cv2.erode(mask, kernel , iterations=2)
+	mask = cv2.dilate(mask, kernel, iterations=2)
 
 	# find contours in the mask and initialize the current
 	# (x, y) center of the ball
@@ -82,15 +83,18 @@ while True:
 		c = max(cnts, key=cv2.contourArea)
 		((x, y), radius) = cv2.minEnclosingCircle(c)
 		# print(radius)
+		if radius > 2.5 and radius < 3 :
+			radius= radius * 2
 		print(str(600*3.42/radius))
 		M = cv2.moments(c)
 		center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
+		#print (center(0),center(1))
 
 		# only proceed if the radius meets a minimum size
-		if radius > 20:
+		if radius > 3:
 			# draw the circle and centroid on the frame,
 			# then update the list of tracked points
-			cv2.circle(frame, (int(x), int(y)), int(radius),
+			cv2.circle(frame, (int(x), int(y)),int(radius),
 				(0, 255, 255), 2)
 			cv2.circle(frame, center, 5, (0, 0, 255), -1)
 
