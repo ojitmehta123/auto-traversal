@@ -1,0 +1,2 @@
+ball_detect:nav_stack_files:pc_data_conversion
+-DCATKIN_DEVEL_PREFIX=/home/oggy/catkin_workspacesO/catkin_ws_rover/devel -DCMAKE_INSTALL_PREFIX=/home/oggy/catkin_workspacesO/catkin_ws_rover/install -G Unix Makefiles

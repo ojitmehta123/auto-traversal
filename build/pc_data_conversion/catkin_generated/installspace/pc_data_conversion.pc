@@ -1,0 +1,8 @@
+prefix=/home/oggy/catkin_workspacesO/catkin_ws_rover/install
+
+Name: pc_data_conversion
+Description: Description of pc_data_conversion
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/oggy/catkin_workspacesO/catkin_ws_rover/install/lib 
+Requires: 
